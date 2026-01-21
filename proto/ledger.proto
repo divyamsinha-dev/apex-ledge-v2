@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package ledger;
+
+// To follow Go standards, we specify the package path for generated code
+option go_package = "./";
+
+service LedgerService {
+  // Transfer handles double-entry movements
+  rpc Transfer(TransferRequest) returns (TransferResponse) {}
+
+  // GetBalance provides real-time account status
+  rpc GetBalance(BalanceRequest) returns (BalanceResponse) {}
+}
+
+message TransferRequest {
+  string from_account_id = 1;
+  string to_account_id = 2;
+  int64 amount_cents = 3; // Use cents to avoid floating point issues
+  string currency = 4;
+}
+
+message TransferResponse {
+  string transaction_id = 1;
+  string status = 2;
+}
+
+message BalanceRequest {
+  string account_id = 1;
+}
+
+message BalanceResponse {
+  int64 balance_cents = 1;
+  string currency = 2;
+}
