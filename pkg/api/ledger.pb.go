@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.4
-// source: ledger.proto
+// source: proto/ledger.proto
 
-package __
+package api
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -33,7 +33,7 @@ type TransferRequest struct {
 
 func (x *TransferRequest) Reset() {
 	*x = TransferRequest{}
-	mi := &file_ledger_proto_msgTypes[0]
+	mi := &file_proto_ledger_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *TransferRequest) String() string {
 func (*TransferRequest) ProtoMessage() {}
 
 func (x *TransferRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_ledger_proto_msgTypes[0]
+	mi := &file_proto_ledger_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *TransferRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferRequest.ProtoReflect.Descriptor instead.
 func (*TransferRequest) Descriptor() ([]byte, []int) {
-	return file_ledger_proto_rawDescGZIP(), []int{0}
+	return file_proto_ledger_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *TransferRequest) GetFromAccountId() string {
@@ -99,7 +99,7 @@ type TransferResponse struct {
 
 func (x *TransferResponse) Reset() {
 	*x = TransferResponse{}
-	mi := &file_ledger_proto_msgTypes[1]
+	mi := &file_proto_ledger_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -111,7 +111,7 @@ func (x *TransferResponse) String() string {
 func (*TransferResponse) ProtoMessage() {}
 
 func (x *TransferResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_ledger_proto_msgTypes[1]
+	mi := &file_proto_ledger_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -124,7 +124,7 @@ func (x *TransferResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransferResponse.ProtoReflect.Descriptor instead.
 func (*TransferResponse) Descriptor() ([]byte, []int) {
-	return file_ledger_proto_rawDescGZIP(), []int{1}
+	return file_proto_ledger_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *TransferResponse) GetTransactionId() string {
@@ -150,7 +150,7 @@ type BalanceRequest struct {
 
 func (x *BalanceRequest) Reset() {
 	*x = BalanceRequest{}
-	mi := &file_ledger_proto_msgTypes[2]
+	mi := &file_proto_ledger_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -162,7 +162,7 @@ func (x *BalanceRequest) String() string {
 func (*BalanceRequest) ProtoMessage() {}
 
 func (x *BalanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_ledger_proto_msgTypes[2]
+	mi := &file_proto_ledger_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,7 +175,7 @@ func (x *BalanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BalanceRequest.ProtoReflect.Descriptor instead.
 func (*BalanceRequest) Descriptor() ([]byte, []int) {
-	return file_ledger_proto_rawDescGZIP(), []int{2}
+	return file_proto_ledger_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *BalanceRequest) GetAccountId() string {
@@ -195,7 +195,7 @@ type BalanceResponse struct {
 
 func (x *BalanceResponse) Reset() {
 	*x = BalanceResponse{}
-	mi := &file_ledger_proto_msgTypes[3]
+	mi := &file_proto_ledger_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -207,7 +207,7 @@ func (x *BalanceResponse) String() string {
 func (*BalanceResponse) ProtoMessage() {}
 
 func (x *BalanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_ledger_proto_msgTypes[3]
+	mi := &file_proto_ledger_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -220,7 +220,7 @@ func (x *BalanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BalanceResponse.ProtoReflect.Descriptor instead.
 func (*BalanceResponse) Descriptor() ([]byte, []int) {
-	return file_ledger_proto_rawDescGZIP(), []int{3}
+	return file_proto_ledger_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BalanceResponse) GetBalanceCents() int64 {
@@ -237,11 +237,11 @@ func (x *BalanceResponse) GetCurrency() string {
 	return ""
 }
 
-var File_ledger_proto protoreflect.FileDescriptor
+var File_proto_ledger_proto protoreflect.FileDescriptor
 
-const file_ledger_proto_rawDesc = "" +
+const file_proto_ledger_proto_rawDesc = "" +
 	"\n" +
-	"\fledger.proto\x12\x06ledger\"\x9c\x01\n" +
+	"\x12proto/ledger.proto\x12\x06ledger\"\x9c\x01\n" +
 	"\x0fTransferRequest\x12&\n" +
 	"\x0ffrom_account_id\x18\x01 \x01(\tR\rfromAccountId\x12\"\n" +
 	"\rto_account_id\x18\x02 \x01(\tR\vtoAccountId\x12!\n" +
@@ -259,28 +259,28 @@ const file_ledger_proto_rawDesc = "" +
 	"\rLedgerService\x12?\n" +
 	"\bTransfer\x12\x17.ledger.TransferRequest\x1a\x18.ledger.TransferResponse\"\x00\x12?\n" +
 	"\n" +
-	"GetBalance\x12\x16.ledger.BalanceRequest\x1a\x17.ledger.BalanceResponse\"\x00B\x04Z\x02./b\x06proto3"
+	"GetBalance\x12\x16.ledger.BalanceRequest\x1a\x17.ledger.BalanceResponse\"\x00B\x15Z\x13apex-ledger/pkg/apib\x06proto3"
 
 var (
-	file_ledger_proto_rawDescOnce sync.Once
-	file_ledger_proto_rawDescData []byte
+	file_proto_ledger_proto_rawDescOnce sync.Once
+	file_proto_ledger_proto_rawDescData []byte
 )
 
-func file_ledger_proto_rawDescGZIP() []byte {
-	file_ledger_proto_rawDescOnce.Do(func() {
-		file_ledger_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_ledger_proto_rawDesc), len(file_ledger_proto_rawDesc)))
+func file_proto_ledger_proto_rawDescGZIP() []byte {
+	file_proto_ledger_proto_rawDescOnce.Do(func() {
+		file_proto_ledger_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_ledger_proto_rawDesc), len(file_proto_ledger_proto_rawDesc)))
 	})
-	return file_ledger_proto_rawDescData
+	return file_proto_ledger_proto_rawDescData
 }
 
-var file_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_ledger_proto_goTypes = []any{
+var file_proto_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_ledger_proto_goTypes = []any{
 	(*TransferRequest)(nil),  // 0: ledger.TransferRequest
 	(*TransferResponse)(nil), // 1: ledger.TransferResponse
 	(*BalanceRequest)(nil),   // 2: ledger.BalanceRequest
 	(*BalanceResponse)(nil),  // 3: ledger.BalanceResponse
 }
-var file_ledger_proto_depIdxs = []int32{
+var file_proto_ledger_proto_depIdxs = []int32{
 	0, // 0: ledger.LedgerService.Transfer:input_type -> ledger.TransferRequest
 	2, // 1: ledger.LedgerService.GetBalance:input_type -> ledger.BalanceRequest
 	1, // 2: ledger.LedgerService.Transfer:output_type -> ledger.TransferResponse
@@ -292,26 +292,26 @@ var file_ledger_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_ledger_proto_init() }
-func file_ledger_proto_init() {
-	if File_ledger_proto != nil {
+func init() { file_proto_ledger_proto_init() }
+func file_proto_ledger_proto_init() {
+	if File_proto_ledger_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ledger_proto_rawDesc), len(file_ledger_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_ledger_proto_rawDesc), len(file_proto_ledger_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_ledger_proto_goTypes,
-		DependencyIndexes: file_ledger_proto_depIdxs,
-		MessageInfos:      file_ledger_proto_msgTypes,
+		GoTypes:           file_proto_ledger_proto_goTypes,
+		DependencyIndexes: file_proto_ledger_proto_depIdxs,
+		MessageInfos:      file_proto_ledger_proto_msgTypes,
 	}.Build()
-	File_ledger_proto = out.File
-	file_ledger_proto_goTypes = nil
-	file_ledger_proto_depIdxs = nil
+	File_proto_ledger_proto = out.File
+	file_proto_ledger_proto_goTypes = nil
+	file_proto_ledger_proto_depIdxs = nil
 }

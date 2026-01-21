@@ -4,23 +4,36 @@ import (
 	"context"
 	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq" // Postgres driver
 )
 
-// NewPostgres creates a connection pool with production settings
+// NewPostgres creates a connection pool with production settings using pgx/v5
 func NewPostgres(uri string) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("postgres", uri)
+	// Parse the connection string
+	config, err := pgx.ParseConfig(uri)
 	if err != nil {
 		return nil, err
 	}
 
-	// Production settings: prevent connection exhaustion
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
-	db.SetConnMaxLifetime(5 * time.Minute)
+	// Use pgx/v5 stdlib driver with sqlx
+	db := stdlib.OpenDB(*config)
 
-	return db, nil
+	// Wrap with sqlx
+	sqlxDB := sqlx.NewDb(db, "pgx")
+
+	// Production settings: prevent connection exhaustion
+	sqlxDB.SetMaxOpenConns(25)
+	sqlxDB.SetMaxIdleConns(25)
+	sqlxDB.SetConnMaxLifetime(5 * time.Minute)
+
+	// Test the connection
+	if err := sqlxDB.Ping(); err != nil {
+		return nil, err
+	}
+
+	return sqlxDB, nil
 }
 
 // ExecTx provides a helper to wrap logic in a transaction

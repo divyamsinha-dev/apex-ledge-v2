@@ -1,20 +1,22 @@
-package ledger
+package account
 
 import (
 	"log"
 )
 
+// Notification represents a notification job
 type Notification struct {
 	AccountID string
 	Message   string
 }
 
-// NotificationWorkerPool manages async tasks
+// NotificationWorkerPool manages async notification tasks
 type NotificationWorkerPool struct {
 	JobQueue chan Notification
 }
 
-func NewWorkerPool(bufferSize int) *NotificationWorkerPool {
+// NewNotificationWorkerPool creates a new worker pool
+func NewNotificationWorkerPool(bufferSize int) *NotificationWorkerPool {
 	return &NotificationWorkerPool{
 		JobQueue: make(chan Notification, bufferSize),
 	}
@@ -29,5 +31,14 @@ func (p *NotificationWorkerPool) Start(workerCount int) {
 				log.Printf("Worker %d: Sending notification to %s: %s", id, job.AccountID, job.Message)
 			}
 		}(i)
+	}
+}
+
+// Enqueue adds a notification job to the queue
+func (p *NotificationWorkerPool) Enqueue(notification Notification) {
+	select {
+	case p.JobQueue <- notification:
+	default:
+		log.Printf("Warning: notification queue full, dropping notification for %s", notification.AccountID)
 	}
 }

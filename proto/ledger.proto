@@ -3,7 +3,7 @@ syntax = "proto3";
 package ledger;
 
 // To follow Go standards, we specify the package path for generated code
-option go_package = "./";
+option go_package = "apex-ledger/pkg/api";
 
 service LedgerService {
   // Transfer handles double-entry movements
