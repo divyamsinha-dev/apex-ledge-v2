@@ -7,6 +7,7 @@ type Account struct {
 	ID           string    `db:"id"`
 	BalanceCents int64     `db:"balance_cents"`
 	Currency     string    `db:"currency"`
+	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
 }
 

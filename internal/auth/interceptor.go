@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -29,6 +30,10 @@ func AuthInterceptor(secretKey string) grpc.UnaryServerInterceptor {
 		// 3. Parse and Validate JWT
 		tokenStr := strings.TrimPrefix(authHeader[0], "Bearer ")
 		token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (any, error) {
+			// Validate signing method to prevent algorithm confusion attacks
+			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+			}
 			return []byte(secretKey), nil
 		})
 

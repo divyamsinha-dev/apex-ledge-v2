@@ -11,6 +11,22 @@ service LedgerService {
 
   // GetBalance provides real-time account status
   rpc GetBalance(BalanceRequest) returns (BalanceResponse) {}
+
+  // CRUD Operations
+  // CreateAccount creates a new account
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
+
+  // GetAccount retrieves full account details
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {}
+
+  // UpdateAccount updates account information
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
+
+  // DeleteAccount deletes an account
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse) {}
+
+  // ListAccounts retrieves all accounts
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {}
 }
 
 message TransferRequest {
@@ -32,4 +48,60 @@ message BalanceRequest {
 message BalanceResponse {
   int64 balance_cents = 1;
   string currency = 2;
+}
+
+// CRUD Request/Response messages
+message CreateAccountRequest {
+  string id = 1; // Optional: if not provided, UUID will be generated
+  int64 initial_balance_cents = 2; // Default: 0
+  string currency = 3; // Required, e.g., "USD", "EUR"
+}
+
+message CreateAccountResponse {
+  string account_id = 1;
+  int64 balance_cents = 2;
+  string currency = 3;
+  string status = 4;
+}
+
+message GetAccountRequest {
+  string account_id = 1;
+}
+
+message GetAccountResponse {
+  string account_id = 1;
+  int64 balance_cents = 2;
+  string currency = 3;
+  string created_at = 4;
+  string updated_at = 5;
+}
+
+message UpdateAccountRequest {
+  string account_id = 1;
+  string currency = 2; // Optional: update currency
+}
+
+message UpdateAccountResponse {
+  string account_id = 1;
+  string currency = 2;
+  string status = 3;
+}
+
+message DeleteAccountRequest {
+  string account_id = 1;
+}
+
+message DeleteAccountResponse {
+  string account_id = 1;
+  string status = 2;
+}
+
+message ListAccountsRequest {
+  int32 limit = 1; // Optional: limit results (default: 100)
+  int32 offset = 2; // Optional: pagination offset (default: 0)
+}
+
+message ListAccountsResponse {
+  repeated GetAccountResponse accounts = 1;
+  int32 total = 2;
 }

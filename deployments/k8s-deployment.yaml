@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apex-ledger
+  labels:
+    app: apex-ledger
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apex-ledger
+  template:
+    metadata:
+      labels:
+        app: apex-ledger
+    spec:
+      containers:
+        - name: apex-ledger
+          image: divyamsinha/apex-ledger:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 50051
+              name: grpc
+
+          env:
+            - name: GRPC_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: apex-ledger-config
+                  key: GRPC_PORT
+
+            - name: WORKER_COUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: apex-ledger-config
+                  key: WORKER_COUNT
+
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: apex-ledger-secret
+                  key: DB_URL
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: apex-ledger-secret
+                  key: JWT_SECRET
+
+          readinessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 10
+            periodSeconds: 20

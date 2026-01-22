@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apex-ledger-config
+  labels:
+    app: apex-ledger
+data:
+  GRPC_PORT: "50051"
+  WORKER_COUNT: "5"

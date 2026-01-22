@@ -117,6 +117,135 @@ func (s *LedgerService) GetBalance(ctx context.Context, accountID string) (*acco
 	return acc, nil
 }
 
+// CreateAccount creates a new account
+func (s *LedgerService) CreateAccount(ctx context.Context, id string, balanceCents int64, currency string) (*account.Account, error) {
+	// Validate inputs
+	if currency == "" {
+		return nil, fmt.Errorf("currency is required")
+	}
+	if len(currency) > 10 {
+		return nil, fmt.Errorf("currency code must be 10 characters or less")
+	}
+	if balanceCents < 0 {
+		return nil, fmt.Errorf("initial balance cannot be negative")
+	}
+
+	// Generate ID if not provided
+	if id == "" {
+		id = uuid.New().String()
+	}
+
+	// Create account
+	acc := &account.Account{
+		ID:           id,
+		BalanceCents: balanceCents,
+		Currency:     currency,
+	}
+
+	if err := s.accountRepo.CreateAccount(ctx, acc); err != nil {
+		return nil, fmt.Errorf("failed to create account: %w", err)
+	}
+
+	// Fetch the created account to get timestamps
+	createdAcc, err := s.accountRepo.GetAccount(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch created account: %w", err)
+	}
+
+	return createdAcc, nil
+}
+
+// GetAccount retrieves full account details
+func (s *LedgerService) GetAccount(ctx context.Context, accountID string) (*account.Account, error) {
+	if accountID == "" {
+		return nil, fmt.Errorf("account ID cannot be empty")
+	}
+
+	acc, err := s.accountRepo.GetAccount(ctx, accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	return acc, nil
+}
+
+// UpdateAccount updates account currency
+func (s *LedgerService) UpdateAccount(ctx context.Context, accountID string, currency string) (*account.Account, error) {
+	if accountID == "" {
+		return nil, fmt.Errorf("account ID cannot be empty")
+	}
+	if currency == "" {
+		return nil, fmt.Errorf("currency is required")
+	}
+	if len(currency) > 10 {
+		return nil, fmt.Errorf("currency code must be 10 characters or less")
+	}
+
+	// Check if account exists
+	_, err := s.accountRepo.GetAccount(ctx, accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Update account
+	if err := s.accountRepo.UpdateAccount(ctx, accountID, currency); err != nil {
+		return nil, fmt.Errorf("failed to update account: %w", err)
+	}
+
+	// Fetch updated account
+	updatedAcc, err := s.accountRepo.GetAccount(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch updated account: %w", err)
+	}
+
+	return updatedAcc, nil
+}
+
+// DeleteAccount deletes an account
+func (s *LedgerService) DeleteAccount(ctx context.Context, accountID string) error {
+	if accountID == "" {
+		return fmt.Errorf("account ID cannot be empty")
+	}
+
+	// Check if account exists
+	_, err := s.accountRepo.GetAccount(ctx, accountID)
+	if err != nil {
+		return err
+	}
+
+	// Delete account
+	if err := s.accountRepo.DeleteAccount(ctx, accountID); err != nil {
+		return fmt.Errorf("failed to delete account: %w", err)
+	}
+
+	return nil
+}
+
+// ListAccounts retrieves all accounts with pagination
+func (s *LedgerService) ListAccounts(ctx context.Context, limit, offset int) ([]account.Account, int, error) {
+	if limit <= 0 {
+		limit = 100 // Default limit
+	}
+	if limit > 1000 {
+		limit = 1000 // Max limit
+	}
+	if offset < 0 {
+		offset = 0
+	}
+
+	accounts, err := s.accountRepo.GetAllAccounts(ctx, limit, offset)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to list accounts: %w", err)
+	}
+
+	total, err := s.accountRepo.GetAccountCount(ctx)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to get account count: %w", err)
+	}
+
+	return accounts, total, nil
+}
+
 // recordTransaction records the transfer in the transactions table
 func (s *LedgerService) recordTransaction(ctx context.Context, tx *sqlx.Tx, txID, fromID, toID string, amount int64, currency string) error {
 	query := `

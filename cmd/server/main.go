@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"apex-ledger/internal/account"
-	"apex-ledger/internal/auth"
 	"apex-ledger/internal/config"
 	"apex-ledger/internal/platform/database"
 	"apex-ledger/internal/service"
 	"apex-ledger/pkg/api"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -47,10 +47,12 @@ func main() {
 	log.Printf("Started %d notification workers", cfg.WorkerCount)
 
 	// Initialize gRPC server with auth interceptor
-	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(auth.AuthInterceptor(cfg.JWTSecret)),
-	)
+	//grpcServer := grpc.NewServer(
+	//	grpc.UnaryInterceptor(auth.AuthInterceptor(cfg.JWTSecret)),
+	//)
+	grpcServer := grpc.NewServer()
 
+	reflection.Register(grpcServer)
 	// Register gRPC services
 	api.RegisterLedgerServiceServer(grpcServer, accountHandler)
 
